@@ -51,7 +51,7 @@
         if (isset($validate_all) && !$validate_all) {
             echo "<p class='php'>Všechna pole musí být vyplněna</p>";
         } 
-        if (isset($_FILES['img']) && $_FILES['img']['error'] !== UPLOAD_ERR_OK) {
+        elseif (isset($_FILES['img']) && $_FILES['img']['error'] !== UPLOAD_ERR_OK) {
             // Soubor byl úspěšně nahrán
             echo "<p class='php'>Musíte nahrát obrázek</p>";
                 }
