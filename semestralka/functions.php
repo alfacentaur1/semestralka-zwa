@@ -49,10 +49,24 @@
         
     }
 
-    //validace emailu
-    function validate_email($email){
-
+    //validace shodnosti hesel
+    function are_passwords_same($p1, $p2) {
+        if($p1==$p2) {
+            return true;
+        }else {
+            return false;
+        }
     }
+
+    //validace emailu - validní - true, nevalidní - false
+    function validate_email($email){
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return true;  
+        } else {
+            return false; 
+        }
+    }
+    
 
 
     //validation in addform

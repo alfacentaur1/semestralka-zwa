@@ -6,11 +6,13 @@
         $username = $_POST["username"];
         $email = $_POST["email"];
         $password = $_POST["password"];
+        $password_znovu = $_POST["password_znovu"];
 
         //validace username
         $validated_username = validate_username($username);
         $validated_password = validate_password($password);
         $validated_email = validate_email($email);
+        $are_passwords_same = are_passwords_same($password,$password_znovu);
 
 
     }else {
@@ -84,17 +86,27 @@
                             echo "<p class='php'>Username už je obsazeno</p>";
                         }
                     }
-                    if(isset($validated_password)) {
+                    elseif(isset($validated_password)) {
                         if($validated_password == "len") {
                             echo "<p class='php'>Heslo musí mít minimálně 6 znaků</p>";
                         }elseif($validated_password == "special") {
                             echo "<p class='php'>Heslo musí mít min. 1 speciální znak a min. 1 velké písmeno</p>";
                         }
                     }
-                    if(isset($validated_email)) {
+                    elseif(isset($validated_email)) {
                         if($validated_email == "taken") {
                             echo "<p class='php'>Email už je obsazený</p>";
                         
+                        }elseif(!$validated_email) {
+                            echo "<p class='php'>Email je ve špatném formátu</p>";
+                        }
+                    }
+
+                    elseif(isset($are_passwords_same)) {
+                        if($are_passwords_same) {
+                            //nic
+                        }else {
+                            echo "<p class='php'>Hesla se neshodují</p>"; 
                         }
                     }
 
