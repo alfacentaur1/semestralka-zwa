@@ -1,0 +1,108 @@
+<?php
+
+    require "functions.php";
+
+    if(isset($_POST["submit"])) {
+        $username = $_POST["username"];
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+
+        //validace username
+        $validated_username = validate_username($username);
+        $validated_password = validate_password($password);
+        $validated_email = validate_email($email);
+
+
+    }else {
+        //nic
+    }
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <title>Registrace</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/forms.css" rel="stylesheet">
+    <script src="js/script.js" defer></script> 
+</head>
+<body>
+    <div class="main">
+        <div class="intro">
+            <h1>Pronajmi.</h1>
+            <h1>Prodej.</h1>
+            <h1>Jednoduše.</h1>
+            <h1 class="rentco">Rentco.</h1>
+        </div>
+        <form action="" method="post">
+            <fieldset>
+                <div class="form">
+                    <h1>Registrace</h1>
+                    <h2>Vítejte</h2>
+                </div>
+                <div class="form">
+                    <label for="username">Uživatelské jméno</label>
+                    <input type="text" id="username" name="username"
+                    <?php
+                        if(isset($username)){
+                            echo "value='" .htmlspecialchars($username)."'";
+                        }
+                    ?>
+                    required>
+                </div>
+                <div class="form">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" 
+                    <?php
+                        if(isset($email)){
+                            echo "value='" .htmlspecialchars($email)."'";
+                        }
+                    ?>
+                    required >
+                </div>
+                <div class="form">
+                    <label for="password">Heslo</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form">
+                    <label for="password-znovu">Heslo znovu</label>
+                    <input type="password" id="password-znovu" name="password-znovu" required>
+                </div>
+                <div class="form">
+                    <input type="submit" name="submit" class="submit">
+                </div>
+                <p>Již máte účet? <a href="login.php">Přihlásit se</a></p>
+                <p id="error_hesla">Hesla se neshodují</p>
+                <?php
+                    if(isset($validated_username)) {
+                        if($validated_username == "len") {
+                            echo "<p class='php'>Username musí mít minimálně 6 znaků</p>";
+                        }elseif($validated_username == "taken") {
+                            echo "<p class='php'>Username už je obsazeno</p>";
+                        }
+                    }
+                    if(isset($validated_password)) {
+                        if($validated_password == "len") {
+                            echo "<p class='php'>Heslo musí mít minimálně 6 znaků</p>";
+                        }elseif($validated_password == "special") {
+                            echo "<p class='php'>Heslo musí mít min. 1 speciální znak a min. 1 velké písmeno</p>";
+                        }
+                    }
+                    if(isset($validated_email)) {
+                        if($validated_email == "taken") {
+                            echo "<p class='php'>Email už je obsazený</p>";
+                        
+                        }
+                    }
+
+
+
+                ?>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>
