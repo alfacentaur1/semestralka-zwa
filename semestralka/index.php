@@ -1,3 +1,10 @@
+<?php
+    //TODO
+    //udělat session a váýpis vítej uživateli $_SESSION["uzivatel"]
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
