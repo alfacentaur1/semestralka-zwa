@@ -86,7 +86,7 @@
                             echo "<p class='php'>Username už je obsazeno</p>";
                         }
                     }
-                    elseif(isset($validated_password) && $validated_password !== "null") {
+                    elseif(isset($validated_password) && $validated_password !== true) {
                         if($validated_password == "len") {
                             echo "<p class='php'>Heslo musí mít minimálně 6 znaků</p>";
                         }else{

@@ -25,7 +25,13 @@
         $special_characters = ['!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '{', '|', '}', '~'];
 
         $splitted_password = str_split($password);
-        
+
+
+        //nema pozadovanou delku
+        echo strlen($password);
+        if(strlen($password) < 6) {
+            return "len";
+        } 
         //loop in password for special and big letters
         foreach($splitted_password as $char) {
             if(in_array($char, $big_letters)) {
@@ -35,14 +41,12 @@
                 $has_no_special = false;
             }
         }
-        //no long enough password
-        if(strlen($password) < 6) {
-            return "len";
-        } 
+
         //no special chars or big
         if ($has_no_big || $has_no_special) {
             return "special";
         }
+
 
         return true;
 
