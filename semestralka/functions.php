@@ -76,7 +76,7 @@
 
     function validate_all($data) {
         foreach ($data as $key => $value) {
-            if (empty($value)) {
+            if (!isset($value)) {
                 return false;
             }
         }
@@ -97,14 +97,14 @@
     //validace cena
     function price_size_check($price, $size) {
         // trim odstrani mezery kolem textu
-        $price = trim($price);
-        $size = trim($size);
+        $price = trim(str_replace(" ", "", $price));
+        $size = trim(str_replace(" ", "", $size));
     
         // kontrolujeme jeslti jsou to cisla a vetsi nez 0
         if (is_numeric($price) && $price > 0 && is_numeric($size) && $size > 0) {
-            return false; // platne
+            return true; // platne
         } else {
-            return true; 
+            return false; 
         }
     }
 ?> 

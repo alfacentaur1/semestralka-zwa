@@ -57,8 +57,8 @@
         elseif (isset($is_right_format) && !$is_right_format) {
             echo "<p class='php'>Obrázek musí být ve formátu JPEG nebo PNG</p>";
         } 
-        elseif (isset($is_price_size_right_format) && $is_price_size_right_format) {
-            echo "<p class='php'>Cena a rozměry musí být číslo větší než 0</p>";
+        elseif (isset($is_price_size_right_format) && !$is_price_size_right_format) {
+            echo "<p class='php'>Cena a rozměry musí být čísla větší než 0</p>";
         }
     
     
