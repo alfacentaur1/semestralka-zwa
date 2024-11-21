@@ -95,11 +95,16 @@
     }
 
     //validace cena
-    function price_size_check($price,$size) {
-        if(is_numeric($price) && $price > 0  && is_numeric($size) && $size >0){
-            return false;
-        }else {
-            return true;
+    function price_size_check($price, $size) {
+        // trim odstrani mezery kolem textu
+        $price = trim($price);
+        $size = trim($size);
+    
+        // kontrolujeme jeslti jsou to cisla a vetsi nez 0
+        if (is_numeric($price) && $price > 0 && is_numeric($size) && $size > 0) {
+            return false; // platne
+        } else {
+            return true; 
         }
     }
 ?> 

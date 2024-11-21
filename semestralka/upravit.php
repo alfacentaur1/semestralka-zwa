@@ -26,7 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/addform.css">
     <link rel="stylesheet" href="css/univerzal.css">
-    <title>Přidat příspěvek</title>
+    <title>Upravit příspěvek</title>
 </head>
 <body>
     <div class="nav">
@@ -45,7 +45,7 @@
             </ul>
         </nav>
     </div>
-    <h2 >Přidání inzerátu</h2>
+    <h2 >Upravení inzerátu</h2>
     <?php 
         if (isset($validate_all) && !$validate_all) {
             echo "<p class='php'>Všechna pole musí být vyplněna</p>";
@@ -71,7 +71,13 @@
                 <div class="form">
                     <div class="form" id="select">
                         <label for="cena">Cena</label>
-                        <input type="text" name="cena" id="cena">
+                        <input type="text" name="cena" id="cena"
+                        <?php
+                        if(isset($_POST["cena"])){
+                            echo "value='" .htmlspecialchars($_POST["cena"])."'";
+                        }
+                        ?>
+                        >
                         <select name="mena" id="cena-input">
                         <option value="czk" <?php echo (isset($_POST['mena']) && $_POST['mena'] === 'czk') ? 'selected' : ''; ?>>czk</option>
                         <option value="eur" <?php echo (isset($_POST['mena']) && $_POST['mena'] === 'eur') ? 'selected' : ''; ?>>eur</option>

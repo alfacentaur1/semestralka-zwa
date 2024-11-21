@@ -52,7 +52,6 @@
             echo "<p class='php'>Všechna pole musí být vyplněna</p>";
         } 
         elseif (isset($_FILES['img']) && $_FILES['img']['error'] !== UPLOAD_ERR_OK) {
-            // Soubor byl úspěšně nahrán
             echo "<p class='php'>Musíte nahrát obrázek</p>";
                 }
         elseif (isset($is_right_format) && !$is_right_format) {
@@ -79,7 +78,13 @@
                 <div class="form">
                     <div class="form" id="select">
                         <label for="cena">Cena</label>
-                        <input type="text" name="cena" id="cena">
+                        <input type="text" name="cena" id="cena"
+                        <?php
+                        if(isset($_POST["cena"])){
+                            echo "value='" .htmlspecialchars($_POST["cena"])."'";
+                        }
+                        ?>
+                        >
                         <select name="mena" id="cena-input">
                         <option value="czk" <?php echo (isset($_POST['mena']) && $_POST['mena'] === 'czk') ? 'selected' : ''; ?>>czk</option>
                         <option value="eur" <?php echo (isset($_POST['mena']) && $_POST['mena'] === 'eur') ? 'selected' : ''; ?>>eur</option>
