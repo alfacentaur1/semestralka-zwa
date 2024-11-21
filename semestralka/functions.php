@@ -3,7 +3,7 @@
     //validace username
 
     function validate_username($username) {
-        if(strlen($username) < 6) {
+        if(strlen(trim($username)) < 6 ) {
             return "len";
         }
         // if($username in db) {
@@ -25,7 +25,7 @@
         $special_characters = ['!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '{', '|', '}', '~'];
 
         $splitted_password = str_split($password);
-
+        
         //loop in password for special and big letters
         foreach($splitted_password as $char) {
             if(in_array($char, $big_letters)) {
@@ -76,7 +76,7 @@
 
     function validate_all($data) {
         foreach ($data as $key => $value) {
-            if (!isset($value)) {
+            if (!isset($value) || trim($value) === "") {
                 return false;
             }
         }
