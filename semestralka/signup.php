@@ -70,8 +70,8 @@
                     <input type="password" id="password" name="password" required>
                 </div>
                 <div class="form">
-                    <label for="password-znovu">Heslo znovu</label>
-                    <input type="password" id="password-znovu" name="password-znovu" required>
+                    <label for="password_znovu">Heslo znovu</label>
+                    <input type="password" id="password_znovu" name="password_znovu" required>
                 </div>
                 <div class="form">
                     <input type="submit" name="submit" class="submit">
@@ -79,21 +79,24 @@
                 <p>Již máte účet? <a href="login.php">Přihlásit se</a></p>
                 <p id="error_hesla">Hesla se neshodují</p>
                 <?php
-                    if(isset($validated_username)) {
+                    if(isset($validated_username) && $validated_username !== "good") {
                         if($validated_username == "len") {
                             echo "<p class='php'>Username musí mít minimálně 6 znaků</p>";
                         }elseif($validated_username == "taken") {
                             echo "<p class='php'>Username už je obsazeno</p>";
                         }
                     }
-                    elseif(isset($validated_password)) {
+                    elseif(isset($validated_password) && $validated_password !== "null") {
                         if($validated_password == "len") {
                             echo "<p class='php'>Heslo musí mít minimálně 6 znaků</p>";
-                        }elseif($validated_password == "special") {
+                        }else{
+                            if($validated_password =="special") {
                             echo "<p class='php'>Heslo musí mít min. 1 speciální znak a min. 1 velké písmeno</p>";
+                            }
                         }
+
                     }
-                    elseif(isset($validated_email)) {
+                    elseif(isset($validated_email) && !$validated_email) {
                         if($validated_email == "taken") {
                             echo "<p class='php'>Email už je obsazený</p>";
                         
@@ -102,13 +105,15 @@
                         }
                     }
 
-                    elseif(isset($are_passwords_same)) {
-                        if($are_passwords_same) {
-                            //nic
-                        }else {
-                            echo "<p class='php'>Hesla se neshodují</p>"; 
-                        }
+                    else {
+                        if(isset($are_passwords_same)){
+                            if($are_passwords_same === true) {
+                                //nic
+                            }else {
+                                echo "<p class='php'>Hesla se neshodují</p>"; 
+                            }
                     }
+                }
 
 
 

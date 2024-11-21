@@ -44,14 +44,15 @@
             return "special";
         }
 
-        return null;
+        return true;
 
         
     }
 
     //validace shodnosti hesel
     function are_passwords_same($p1, $p2) {
-        if($p1==$p2) {
+        echo "hesla";
+        if($p1===$p2) {
             return true;
         }else {
             return false;
