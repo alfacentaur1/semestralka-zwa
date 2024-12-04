@@ -78,15 +78,18 @@
 
     function validate_all($data) {
         foreach ($data as $key => $fields) {
+            //kdyz je to pole
             if (is_array($fields)) {
                 //musime iterovat pres vsechna vnorena pole
                 foreach ($fields as $field_key => $value) {
+                    //obrazek je dalsi array
                     if (is_array($value)) {
                         // obrazek
                         if (isset($value["tmp_name"]) && $value["error"] !== UPLOAD_ERR_OK) {
                             return false;
                         }
                     } else {
+                        //uz zadne arraye nejsou
                         // ostatni stringy
                         if (!isset($value) || trim((string)$value) === "") {
                             return false;
