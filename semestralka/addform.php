@@ -1,36 +1,48 @@
 <?php
 require "functions.php";
 
+$errors = []; // Pole pro ukládání chyb
+
 if (isset($_POST["submit"])) {
-    $data = [
+    $ad_id = $_POST["ad_id"];
+    $data = [$ad_id  =>[
         "lokalita" => $_POST["lokalita"],
         "cena" => $_POST["cena"],
-        "mena" => $_POST["mena"], 
+        "mena" => $_POST["mena"],
         "rozmery" => $_POST["rozmery"],
         "popis" => trim($_POST["popis"]),
         "prodej" => $_POST["prodej"],
-        "img" => $_FILES["img"]
-    ];
+        "img" => $_FILES["img"],
+        "user_id" => $_POST["user_id"],
+        
+    ]];
 
-    $validate_all = validate_all($data); // true pokud jsou vsechna pole spravne vyplnena
-    $is_price_size_right_format = price_size_check($_POST["cena"], $_POST["rozmery"]); // true pokud jsou rozmery a cena spravne
+    // Validace polí
+    if (!validate_all($data)) {
+        $errors[] = "Všechna pole musí být vyplněna.";
+    }
 
-    // overeni formatu obrazku
-    $is_right_format = isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK 
-                       && is_right_format($_FILES['img']);
+    // Validace ceny a rozměrů
+    if (!price_size_check($_POST["cena"], $_POST["rozmery"])) {
+        $errors[] = "Cena a rozměry musí být čísla větší než 0.";
+    }
 
-    // pokud je vse ok
-    if ($validate_all && $is_price_size_right_format && $is_right_format) {
+    // Validace obrázku
+    if (!isset($_FILES['img']) || $_FILES['img']['error'] !== UPLOAD_ERR_OK) {
+        $errors[] = "Musíte nahrát obrázek.";
+    } elseif (!is_right_format($_FILES['img'])) {
+        $errors[] = "Obrázek musí být ve formátu JPEG nebo PNG.";
+    }
 
-        // json ulozeni
-        addAd($data);
-
-        // na index
+    // Pokud nejsou chyby, pokračujeme
+    if (empty($errors)) {
+        addAd($data); // Uložení inzerátu
         header("Location: index.php?php=uspesne pridano");
         exit();
     }
 }
 ?>
+
 
 
 
@@ -47,25 +59,29 @@ if (isset($_POST["submit"])) {
 <?php require "nav.php" ?>
     <h2 >Přidání inzerátu</h2>
     <?php 
-        if (isset($validate_all) && !$validate_all) {
-            echo "<p class='php'>Všechna pole musí být vyplněna</p>";
-        } 
-        if (isset($_FILES["img"]) && $_FILES["img"]["error"] !== UPLOAD_ERR_OK) {
-            echo "<p class='php'>Musíte nahrát obrázek</p>";
-                }
-        if (isset($is_right_format) && !$is_right_format) {
-            echo "<p class='php'>Obrázek musí být ve formátu JPEG nebo PNG</p>";
-        } 
-        if (isset($is_price_size_right_format) && !$is_price_size_right_format) {
-            echo "<p class='php'>Cena a rozměry musí být čísla větší než 0</p>";
-        }
-    
+        // if (isset($validate_all) && !$validate_all) {
+        //     echo "<p class='php'>Všechna pole musí být vyplněna</p>";
+        // } 
+        // if (isset($_FILES["img"]) && $_FILES["img"]["error"] !== UPLOAD_ERR_OK) {
+        //     echo "<p class='php'>Musíte nahrát obrázek</p>";
+        //         }
+        // if (isset($is_right_format) && !$is_right_format) {
+        //     echo "<p class='php'>Obrázek musí být ve formátu JPEG nebo PNG</p>";
+        // } 
+        // if (isset($is_price_size_right_format) && !$is_price_size_right_format) {
+        //     echo "<p class='php'>Cena a rozměry musí být čísla větší než 0</p>";
+        // }
+    foreach($errors as $error){
+        echo "<p class='php'>$error</p>";
+    }
     
     ?>
     <div class="form-1">
         <form action="" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <div class="form">
+                    <input type="hidden" name ="user_id" value ="12" >
+                    <input type="hidden" name="ad_id" value=<?php echo strval(uniqid())?>>
                     <label for="lokalita">Lokalita</label>
                     <input type="text" name="lokalita" id="lokalita"
                     <?php

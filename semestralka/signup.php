@@ -71,6 +71,7 @@
                     ?>
                     required >
                 </div>
+                <input type="hidden" name="role" value="uzivatel">
                 <div class="form">
                     <label for="password">Heslo</label>
                     <input type="password" id="password" name="password" required>

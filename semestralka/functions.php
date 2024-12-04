@@ -78,18 +78,23 @@
 
     function validate_all($data) {
         foreach ($data as $key => $value) {
-            if ($key === 'img') {
-                // zda existuje obrazek a byl spravne nahran
-                if (!isset($value['tmp_name']) || $value['error'] !== UPLOAD_ERR_OK) {
+            if (is_array($value)) {
+                // Pokud je hodnota pole (např. obrázek), validuj specificky
+                if (isset($value['tmp_name']) && $value['error'] !== UPLOAD_ERR_OK) {
+
+                    return false;
+                    
+                }
+            } else {
+                // Ověření nepovolených prázdných hodnot
+                if (!isset($value) || trim((string)$value) === "") {
+                        
                     return false;
                 }
-            } elseif (!isset($value) || trim($value) === "") {
-                return false; // prazdne stringy
             }
         }
         return true;
     }
-
     //validace foto true kdyz je spravne
     function is_right_format($photo) {
         if(($photo["type"] == "image/png"

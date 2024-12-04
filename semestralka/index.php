@@ -1,6 +1,6 @@
 <?php
-    //TODO
-    //udělat session a váýpis vítej uživateli $_SESSION["uzivatel"]
+    require "functions.php";
+    $ads = loadAds();
 ?>
 
 
@@ -26,8 +26,7 @@
     <div class="nadpis">
         <h3>Hlavní stránka</h3>
     </div>
-    <div class="main">  
-        <div class="prispevek">
+    <!-- <div class="prispevek">
             <a href="inzerat.php">
                 <div class="prispevek-text">
                     <div class="prodej">
@@ -46,7 +45,51 @@
                         <p>Rozměry: 46 m2</p>
                     </div>
                 </div>
-            </a>     
+            </a>      -->
+    <div class="main">  
+        <?php 
+        foreach ($ads as $adGroup) {
+            // Iterace přes asociativní pole uvnitř první úrovně
+            foreach ($adGroup as $key => $ad) {
+                // $key obsahuje klíč (např. "675097c3955b1")
+                $id = htmlspecialchars($key);
+        
+                // Přístup k detailům inzerátu
+                $lokalita = htmlspecialchars($ad["lokalita"]);
+                $cena = htmlspecialchars($ad["cena"]);
+                $mena = htmlspecialchars($ad["mena"]);
+                $rozmery = htmlspecialchars($ad["rozmery"]);
+                $prodej = htmlspecialchars($ad["prodej"]);
+        
+            
+        
+                echo "<div class='prispevek'>
+                        <a href='inzerat.php?id=$id'>
+                            <div class='prispevek-text'>
+                                <div class='prodej'>
+                                    <h2>$prodej</h2>
+                                </div>
+                            <div class='prispevek-img'>
+                                <img src='' alt='obrazek-inzeratu'>
+                            </div>
+                            <div class='prispevek-lokalita'>
+                                <p>Lokalita: $lokalita</p>
+                            </div>
+                            <div class='prispevek-cena'>
+                                <p>Cena:  $cena $mena</p>
+                            </div>
+                            <div class='prispevek-rozmery'>
+                                <p>Rozměry: $rozmery m2</p>
+                            </div>
+                        </div>
+                    </a>  
+                </div>   ";
+            
+            }
+        }
+        
+
+        ?>
         </div>
     
         

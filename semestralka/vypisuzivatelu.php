@@ -9,55 +9,44 @@
 </head>
 <body>
 <?php require "nav.php" ?>
-    <div class="container-uzivatelu">
-        <div class="uzivatel">
-            <div class="uzivatel-text">
-                <p class="underline">Uživatel</p>
-                <p>Filip Kopecký</p>
+<div class='container-uzivatelu'>
+<div class='form'>
+<form action='#' method='post'>
+<?php 
+
+require "functions.php";
+
+$users = loadUsers();
+
+foreach ($users as $user) {
+    $username = htmlspecialchars($user["username"]); // Escapování výstupu
+    $role = htmlspecialchars($user["role"]); // Escapování výstupu
+
+    echo "
+    <div class='container-uzivatelu'>
+        <div class='uzivatel'>
+            <div class='uzivatel-text'>
+                <p class='underline'>Uživatel</p>
+                <p>$username</p>
             </div>
-            <div class="form">
-                <form action="#" method="post">
-                    <label for="role-1">Role</label>
-                    <select name="role" id="role-1">
-                        <option value="admin">admin</option>
-                        <option value="uzivatel">uživatel</option>
+
+                    <label for='role-$username'>Role</label>
+                    <select name='role' id='role-$username'>
+                        <option value='admin' " . ($role == 'admin' ? 'selected' : '') . ">admin</option>
+                        <option value='uzivatel' " . ($role == 'uzivatel' ? 'selected' : '') . ">uživatel</option>
                     </select>
-                </form>
-            </div>
-        </div>
-        <div class="uzivatel">
-            <div class="uzivatel-text">
-                <p class="underline">Uživatel</p>
-                <p>Filip Kopecký</p>
-            </div>
-            <div class="form">
-                <form action="#" method="post">
-                    <label for="role">Role</label>
-                    <select name="role" id="role">
-                        <option value="admin">admin</option>
-                        <option value="uzvatel">uživatel</option>
-                    </select>
-                </form>
-            </div>
-        </div>
-        <div class="uzivatel">
-            <div class="uzivatel-text">
-                <p class="underline">Uživatel</p>
-                <p>Filip Kopecký</p>
-            </div>
-            <div class="form">
-                <form action="#" method="post">
-                    <label for="role-2">Role</label>
-                    <select name="role" id="role-2">
-                        <option value="admin">admin</option>
-                        <option value="uzvatel">uživatel</option>
-                    </select>
-                </form>
-            </div>
-        </div>
-        <div class="tlacitko">
-            <input type="submit" value="potvrdit" class="submit" name="role">
-        </div>
-    </div>
+
+    ";
+}
+?>
+</form>
+</div>
+<div class='tlacitko'>
+<input type='submit' value='potvrdit' class='submit'>
+</div>
+</div>
+
+
+    
 </body>
 </html>
