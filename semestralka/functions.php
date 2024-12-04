@@ -88,7 +88,7 @@
             } else {
                 // Ověření nepovolených prázdných hodnot
                 if (!isset($value) || trim((string)$value) === "") {
-                        
+
                     return false;
                 }
             }
@@ -189,5 +189,14 @@
         $ads = loadAds();
         $ads[] = $data;
         addToJson("inzeraty.json",$ads);
+    }
+
+    function updateDB($file) {
+        //global $db;
+        $json = json_encode($file);
+
+        $result = file_put_contents("inzeraty.json",$json);
+
+
     }
 ?>
