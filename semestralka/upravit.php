@@ -77,9 +77,11 @@
 <?php require "nav.php" ?>
     <h2 >Upravení inzerátu</h2>
     <?php 
-    foreach($errors as $error){
-        echo "<p class='php'>$error</p>";
-    }
+    if(isset($errors)){
+        foreach($errors as $error){
+            echo "<p class='php'>$error</p>";
+        }
+}
     
     
     ?>

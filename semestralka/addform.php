@@ -16,9 +16,10 @@ if (isset($_POST["submit"])) {
         "user_id" => $_POST["user_id"],
         
     ]];
-
+    $validate_all = validate_all($data);
+    $is_price_size_right_format = price_size_check($_POST["cena"],$_POST["rozmery"]);
     // Validace polí
-    if (!validate_all($data)) {
+    if (isset($validate_all) && !$validate_all) {
         $errors[] = "Všechna pole musí být vyplněna.";
     }
 

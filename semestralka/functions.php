@@ -77,24 +77,26 @@
     //inputy nejsou empty
 
     function validate_all($data) {
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                // Pokud je hodnota pole (např. obrázek), validuj specificky
-                if (isset($value['tmp_name']) && $value['error'] !== UPLOAD_ERR_OK) {
-
-                    return false;
-                    
-                }
-            } else {
-                // Ověření nepovolených prázdných hodnot
-                if (!isset($value) || trim((string)$value) === "") {
-
-                    return false;
+        foreach ($data as $key => $fields) {
+            if (is_array($fields)) {
+                //musime iterovat pres vsechna vnorena pole
+                foreach ($fields as $field_key => $value) {
+                    if (is_array($value)) {
+                        // obrazek
+                        if (isset($value["tmp_name"]) && $value["error"] !== UPLOAD_ERR_OK) {
+                            return false;
+                        }
+                    } else {
+                        // ostatni stringy
+                        if (!isset($value) || trim((string)$value) === "") {
+                            return false;
+                        }
+                    }
                 }
             }
-        }
-        return true;
+        return true; // vsechno alright
     }
+}
     //validace foto true kdyz je spravne
     function is_right_format($photo) {
         if(($photo["type"] == "image/png"
