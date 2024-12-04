@@ -9,12 +9,18 @@
         $password_znovu = $_POST["password_znovu"];
 
         //validace username
-        $validated_username = validate_username($username);
-        $validated_password = validate_password($password);
-        $validated_email = validate_email($email);
-        $are_passwords_same = are_passwords_same($password,$password_znovu);
-
-
+        $validated_username = validate_username($username); //"good" kdyz je to spravne, jinak "len"
+        $validated_password = validate_password($password); //"len" pri delce, "special" pri znaku jinak true
+        $validated_email = validate_email($email); // true kdyz je spravny
+        $are_passwords_same = are_passwords_same($password,$password_znovu); //true spravne, false spatne
+        $users = loadUsers();
+        if(isAvalaible($email,$username) && $validated_email && $are_passwords_same && $validated_password
+        &&$validated_username == "good"){
+            addUser($email,$username,$password);
+            header("Location: index.php");
+            exit;
+        }
+        
     }else {
         //nic
     }
@@ -112,7 +118,21 @@
                         }else {
                             echo "<p class='php'>Hesla se neshodují</p>"; 
                         }
+                    }if(isset($users) && isset($email) && isset($username)){
+                        $valid_email = validEmail($email,$users);
+                        $valid_username = validUsername($username,$users);
+                        if (isset($valid_email)) {
+                            if($valid_email != true){
+                                echo "<p class='php'>email není dostupný</p>"; 
+                            }
+                        }
+                        if (isset($valid_username)) {
+                            if($valid_username != true){
+                                echo "<p class='php'>uživatelské jméno není dostupné</p>"; 
+                            }
+                        }
                     }
+                    
                 
 
 

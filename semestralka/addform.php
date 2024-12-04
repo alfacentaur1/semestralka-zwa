@@ -1,21 +1,35 @@
 <?php
-    require "functions.php";
+require "functions.php";
 
-    if(isset($_POST["submit"])) {
-        $data = [
-            'lokalita' => $_POST["lokalita"],
-            'cena' => $_POST["cena"],
-            'mena' => $_POST["mena"], 
-            'rozmery' => $_POST["rozmery"],
-            'popis' => $_POST["popis"],
-            'prodej' => $_POST["prodej"],
-            'img' => $_FILES["img"]
-        ];
+if (isset($_POST["submit"])) {
+    $data = [
+        "lokalita" => $_POST["lokalita"],
+        "cena" => $_POST["cena"],
+        "mena" => $_POST["mena"], 
+        "rozmery" => $_POST["rozmery"],
+        "popis" => trim($_POST["popis"]),
+        "prodej" => $_POST["prodej"],
+        "img" => $_FILES["img"]
+    ];
 
-        $validate_all = validate_all($data);
-        $is_price_size_right_format = price_size_check($_POST["cena"],$_POST["rozmery"]);
+    $validate_all = validate_all($data); // true pokud jsou vsechna pole spravne vyplnena
+    $is_price_size_right_format = price_size_check($_POST["cena"], $_POST["rozmery"]); // true pokud jsou rozmery a cena spravne
+
+    // overeni formatu obrazku
+    $is_right_format = isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK 
+                       && is_right_format($_FILES['img']);
+
+    // pokud je vse ok
+    if ($validate_all && $is_price_size_right_format && $is_right_format) {
+
+        // json ulozeni
+        addAd($data);
+
+        // na index
+        header("Location: index.php?php=uspesne pridano");
+        exit();
     }
-
+}
 ?>
 
 
@@ -30,34 +44,19 @@
     <title>Přidat příspěvek</title>
 </head>
 <body>
-    <div class="nav">
-        <nav>
-            <h1>Rentco.</h1>
-            <ul>
-                <li><a href="index.php">Domů</a></li>
-                <li><a href="addform.php">Přidat</a></li>
-                <li><a href="profil.php">Profil</a></li>
-            </ul>
-            <ul>
-                <li class="odkazy"><a href="login.php">Přihlásit</a></li>
-                <li class="odkazy"><a href="signup.php">Registrovat</a></li>
-                <li class="odkazy"><a href="signup.php">Odhlásit</a></li>
-                <li><a href="vypisuzivatelu.php" class="a-role">Role</a></li>
-            </ul>
-        </nav>
-    </div>
+<?php require "nav.php" ?>
     <h2 >Přidání inzerátu</h2>
     <?php 
         if (isset($validate_all) && !$validate_all) {
             echo "<p class='php'>Všechna pole musí být vyplněna</p>";
         } 
-        elseif (isset($_FILES['img']) && $_FILES['img']['error'] !== UPLOAD_ERR_OK) {
+        if (isset($_FILES["img"]) && $_FILES["img"]["error"] !== UPLOAD_ERR_OK) {
             echo "<p class='php'>Musíte nahrát obrázek</p>";
                 }
-        elseif (isset($is_right_format) && !$is_right_format) {
+        if (isset($is_right_format) && !$is_right_format) {
             echo "<p class='php'>Obrázek musí být ve formátu JPEG nebo PNG</p>";
         } 
-        elseif (isset($is_price_size_right_format) && !$is_price_size_right_format) {
+        if (isset($is_price_size_right_format) && !$is_price_size_right_format) {
             echo "<p class='php'>Cena a rozměry musí být čísla větší než 0</p>";
         }
     

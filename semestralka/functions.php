@@ -28,7 +28,6 @@
 
 
         //nema pozadovanou delku
-        echo strlen($password);
         if(strlen($password) < 6) {
             return "len";
         } 
@@ -55,7 +54,6 @@
 
     //validace shodnosti hesel
     function are_passwords_same($p1, $p2) {
-        echo "hesla";
         if($p1===$p2) {
             return true;
         }else {
@@ -80,21 +78,25 @@
 
     function validate_all($data) {
         foreach ($data as $key => $value) {
-            if (!isset($value) || trim($value) === "") {
-                return false;
+            if ($key === 'img') {
+                // zda existuje obrazek a byl spravne nahran
+                if (!isset($value['tmp_name']) || $value['error'] !== UPLOAD_ERR_OK) {
+                    return false;
+                }
+            } elseif (!isset($value) || trim($value) === "") {
+                return false; // prazdne stringy
             }
         }
         return true;
     }
-    
 
-    //validace foto
+    //validace foto true kdyz je spravne
     function is_right_format($photo) {
         if(($photo["type"] == "image/png"
         || $photo["type"] == "image/jpeg" )){
-            return false;
+            return true;
         } else {
-        return true;
+        return false;
         }
     }
 
@@ -111,4 +113,76 @@
             return false; 
         }
     }
-?> 
+    function addToJson($json,$data) {
+        file_put_contents($json,json_encode($data));
+    }
+    function loadUsers() {
+        $users = file_get_contents("users.json");
+        if (!$users) return [];
+        return json_decode($users, true);
+    }
+
+    //kdyz je to v jsonu dostupne(mail, username) tak vrat true
+    function isAvalaible($email,$username) {
+        $users = loadUsers();
+        foreach ($users as $user) {
+            if (($user["email"] == $email) || $user["username"] == $username){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //pridame usera, kdyz to jde, vratime true, jinak vratime false
+    function addUser($email,$username,$password) {
+        $users = loadUsers();
+        
+        
+        $users[] = [
+            "id" => uniqid(),
+            "email" => $email,
+            "username" => $username,
+            "password" => $password
+        ];
+        addToJson("users.json", $users);
+        
+    }
+
+    function validEmail($email,$users) {
+        foreach ($users as $user) {
+            if (($user["email"] == $email)){
+                return false;
+            }
+        }
+        return true;
+    }
+    function validUsername($username,$users) {
+        foreach ($users as $user) {
+            if (($user["username"] == $username)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function userLogin($username,$password,$users) {
+        foreach ($users as $user) {
+            if($user["password"] == $password && $user["username"] == $username) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+    function loadAds() {
+        $ads = file_get_contents("inzeraty.json");
+        if (!$ads) return [];
+        return json_decode($ads, true);
+    }
+
+    function addAd($data) {
+        $ads = loadAds();
+        $ads[] = $data;
+        addToJson("inzeraty.json",$ads);
+    }
+?>

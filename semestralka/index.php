@@ -15,22 +15,14 @@
     <link rel="stylesheet" href="css/univerzal.css">
 </head>
 <body>
-    <div class="nav">
-        <nav>
-            <h1>Rentco.</h1>
-            <ul>
-                <li><a href="index.php">Domů</a></li>
-                <li><a href="addform.php">Přidat</a></li>
-                <li><a href="profil.php">Profil</a></li>
-            </ul>
-            <ul>
-                <li class="odkazy"><a href="login.php">Přihlásit</a></li>
-                <li class="odkazy"><a href="signup.php">Registrovat</a></li>
-                <li class="odkazy"><a href="signup.php">Odhlásit</a></li>
-                <li><a href="vypisuzivatelu.php" class="a-role">Role</a></li>
-            </ul>
-        </nav>
-    </div>
+<?php require "nav.php" ?>
+<?php 
+    if (isset($_GET["php"])){
+         $message = $_GET["php"];
+        echo "<div class='phpdiv'></div><p class='php'>$message</p></div>";
+    }
+    
+    ?>
     <div class="nadpis">
         <h3>Hlavní stránka</h3>
     </div>
@@ -57,90 +49,7 @@
             </a>     
         </div>
     
-        <a href="inzerat.php">
-            <div class="prispevek">
-                <div class="prispevek-text">
-                    <div class="prodej">
-                        <h2>Prodej</h2>
-                    </div>
-                    <div class="prispevek-img">
-                        <img src="images/img_realitky.jpg" alt="obrazek-inzeratu">
-                    </div>
-                    <div class="prispevek-lokalita">
-                        <p>Lokalita: Praha</p>
-                    </div>
-                    <div class="prispevek-cena">
-                        <p>Cena: 23 000 Kč</p>
-                    </div>
-                    <div class="prispevek-rozmery">
-                        <p>Rozměry: 46 m2</p>
-                    </div>
-                </div>     
-            </div>
-        </a>
-        <a href="inzerat.php">
-            <div class="prispevek" >
-                <div class="prispevek-text">
-                    <div class="prodej">
-                        <h2>Pronájem</h2>
-                    </div>
-                    <div class="prispevek-img">
-                        <img src="images/img_realitky.jpg" alt="obrazek-inzeratu">
-                    </div>
-                    <div class="prispevek-lokalita">
-                        <p>Lokalita: Praha</p>
-                    </div>
-                    <div class="prispevek-cena">
-                        <p>Cena: 23 000 Kč</p>
-                    </div>
-                    <div class="prispevek-rozmery">
-                        <p>Rozměry: 46 m2</p>
-                    </div>
-                </div>     
-            </div>
-        </a>
-        <a href="inzerat.php">
-            <div class="prispevek">
-                <div class="prispevek-text">
-                    <div class="prodej">
-                        <h2>Prodej</h2>
-                    </div>
-                    <div class="prispevek-img">
-                        <img src="images/img_realitky.jpg" alt="obrazek-inzeratu">
-                    </div>
-                    <div class="prispevek-lokalita">
-                        <p>Lokalita: Praha</p>
-                    </div>
-                    <div class="prispevek-cena">
-                        <p>Cena: 23 000 Kč</p>
-                    </div>
-                    <div class="prispevek-rozmery">
-                        <p>Rozměry: 46 m2</p>
-                    </div>
-                </div>     
-            </div>
-        </a>
-        <a href="inzerat.php">
-            <div class="prispevek">
-                <div class="prispevek-text">
-                    <div class="prodej">
-                        <h2>Pronájem</h2>
-                    </div>
-                    <div class="prispevek-img">
-                        <img src="images/img_realitky.jpg" alt="obrazek-inzeratu">
-                    </div>
-                    <div class="prispevek-lokalita">
-                        <p>Lokalita: Praha</p>
-                    </div>
-                    <div class="prispevek-cena">
-                        <p>Cena: 23 000 Kč</p>
-                    </div>
-                    <div class="prispevek-rozmery">
-                        <p>Rozměry: 46 m2</p>
-                    </div>
-                </div>     
-            </div>
-        </a>
+        
     </div>
     <div class="buttons">
         <div class="skip">

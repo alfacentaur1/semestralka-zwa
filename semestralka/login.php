@@ -4,12 +4,26 @@
     if(isset($_POST["submit"])) {
         $username = $_POST["username"];
         $password = $_POST["password"];
+    $users = loadUsers();
+    $logged_in = True;
 
         //validace username
         //TODO
         //$is_username_correct (kdyz je prazdne nebo spatne => false)
         //is_password_correct (kdyz je prazdne, nebo spatne => false)
-
+        
+        if (!empty($username) && !empty($password)) {
+            $can_log_in = userLogin($username, $password, $users);
+            if ($can_log_in) {
+                // prihlaseni je uspesne
+                header("Location: index.php");
+                exit;
+            } else {
+                $logged_in = false; // spatne udaje
+            }
+        } else {
+            $logged_in = false; // nevyplneno
+        }
     }else {
         //nic
     }
@@ -62,8 +76,13 @@
                     if(isset($password) && isset($username) ) {
                         if(!$password || !$username) {
                             echo "<p class='php'>Špatně zadaný username nebo heslo</p>";
+                        }elseif (isset($logged_in) ) {
+                            if($logged_in == false) {
+                                echo "<p class='php'>Špatně zadaný username nebo heslo</p>";
+                            }
                         }
                     }
+                    
                 ?>
     
             </fieldset>

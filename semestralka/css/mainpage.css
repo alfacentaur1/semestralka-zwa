@@ -111,3 +111,9 @@ img {
     opacity:0.4;
     transition:0.3s;
 }
+.phpdiv {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    color:red;
+}
