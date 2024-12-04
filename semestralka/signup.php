@@ -7,6 +7,7 @@
         $email = $_POST["email"];
         $password = $_POST["password"];
         $password_znovu = $_POST["password_znovu"];
+        $role = $_POST["role"];
 
         //validace username
         $validated_username = validate_username($username); //"good" kdyz je to spravne, jinak "len"
@@ -16,7 +17,7 @@
         $users = loadUsers();
         if(isAvalaible($email,$username) && $validated_email && $are_passwords_same && $validated_password
         &&$validated_username == "good"){
-            addUser($email,$username,$password);
+            addUser($email,$username,$password,$role);
             header("Location: index.php");
             exit;
         }
@@ -45,7 +46,7 @@
             <h1>Jednoduše.</h1>
             <h1 class="rentco">Rentco.</h1>
         </div>
-        <form action="" method="post">
+        <form action="signup.php" method="post">
             <fieldset>
                 <div class="form">
                     <h1>Registrace</h1>

@@ -141,7 +141,7 @@
     }
 
     //pridame usera, kdyz to jde, vratime true, jinak vratime false
-    function addUser($email,$username,$password) {
+    function addUser($email,$username,$password,$role) {
         $users = loadUsers();
         
         
@@ -149,7 +149,8 @@
             "id" => uniqid(),
             "email" => $email,
             "username" => $username,
-            "password" => $password
+            "password" => $password,
+            "role" => $role
         ];
         addToJson("users.json", $users);
         

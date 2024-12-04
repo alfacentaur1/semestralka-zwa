@@ -48,7 +48,7 @@
                 <h1 class="rentco">Rentco.</h1>
             </div>
     
-        <form action="#" method="post">
+        <form action="login.php" method="post">
             <fieldset class="fieldset-form">
                 <div class="form">
                     <h1>Přihlášení</h1>
