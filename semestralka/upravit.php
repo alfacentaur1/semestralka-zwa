@@ -3,6 +3,7 @@
     //TODO
     // pres session user id
     //
+    $ads = loadAds();
     if(isset($_POST["submit"])) {
         $ad_id = $_POST["ad_id"];
         $data = [$ad_id  =>[
@@ -21,7 +22,6 @@
          $is_price_size_right_format = price_size_check($_POST["cena"],$_POST["rozmery"]);
     
     $errors = [];
-    $ads = loadAds();
 
     //hledame errory
     if (isset($validate_all) && !validate_all($data)) {
