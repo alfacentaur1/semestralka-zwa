@@ -50,7 +50,7 @@
         if (isset($validate_all) && !$validate_all) {
             echo "<p class='php'>Všechna pole musí být vyplněna</p>";
         } 
-        elseif (isset($is_price_size_right_format) && !$is_price_size_right_format) {
+        if (isset($is_price_size_right_format) && !$is_price_size_right_format) {
             echo "<p class='php'>Cena a rozměry musí být číslo větší než 0</p>";
         }
     

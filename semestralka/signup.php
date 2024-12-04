@@ -86,7 +86,7 @@
                             echo "<p class='php'>Username už je obsazeno</p>";
                         }
                     }
-                    elseif(isset($validated_password) && $validated_password !== true) {
+                    if(isset($validated_password) && $validated_password !== true) {
                         if($validated_password == "len") {
                             echo "<p class='php'>Heslo musí mít minimálně 6 znaků</p>";
                         }else{
@@ -96,7 +96,7 @@
                         }
 
                     }
-                    elseif(isset($validated_email) && !$validated_email) {
+                    if(isset($validated_email) && !$validated_email) {
                         if($validated_email == "taken") {
                             echo "<p class='php'>Email už je obsazený</p>";
                         
@@ -105,15 +105,15 @@
                         }
                     }
 
-                    else {
-                        if(isset($are_passwords_same)){
-                            if($are_passwords_same === true) {
-                                //nic
-                            }else {
-                                echo "<p class='php'>Hesla se neshodují</p>"; 
-                            }
+                    
+                    if(isset($are_passwords_same)){
+                        if($are_passwords_same === true) {
+                            //nic
+                        }else {
+                            echo "<p class='php'>Hesla se neshodují</p>"; 
+                        }
                     }
-                }
+                
 
 
 
