@@ -17,10 +17,14 @@ function checkUsername(e) {
 function validateUsername(e) {
     console.log("Server response:", e.target.responseText);
     const p = document.getElementById("hidden");
+    const name = document.getElementById("username");
     if (e.target.responseText == "used") {
         p.classList.add("ajax");
-    }else {
+        name.classList.add("chyba");
+    }else if (e.target.responseText == "not_used"){
         p.classList.remove("ajax");
+        name.classList.remove("chyba");
+        
     }
 }
 

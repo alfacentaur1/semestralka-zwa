@@ -2,9 +2,9 @@ function isEmailValid(e) {
     let test = document.getElementById("email");
     if (test.value.indexOf("@") === -1 || test.value.indexOf(".") === -1) {
         test.classList.add("chyba");
-    }
-    else {
-        test.classList.remove("chyba");
+        e.preventDefault();
+  
+        
     }
 }
 //kdyz chybi @ a . nemuzeme submittnout
@@ -12,7 +12,7 @@ function isEmailSubmittable(e) {
     let test = document.getElementById("email");
     if (test.value.indexOf("@") === -1 && test.value.indexOf(".") === -1) {
         e.preventDefault();
-        test.classList.add("chyba");
+
     }
 }
 
@@ -29,8 +29,8 @@ function arePasswordsSame(e) {
         e.preventDefault();
         let p = document.getElementById("error_hesla");
         p.classList.add("error_hesla");
-        pas1.classList.add("password")
-        pas2.classList.add("password")
+        pas1.classList.add("password");
+        pas2.classList.add("password");
     }
 }
 
@@ -51,4 +51,4 @@ function main() {
 main();
 
 
-//závislost password polí
+
