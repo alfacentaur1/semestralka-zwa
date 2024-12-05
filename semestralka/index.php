@@ -48,11 +48,11 @@
             </a>      -->
     <div class="main">  
         <?php 
-        foreach ($ads as $adGroup) {
+        foreach ($ads as $ad) {
             // Iterace přes asociativní pole uvnitř první úrovně
-            foreach ($adGroup as $key => $ad) {
+            
                 // $key obsahuje klíč (např. "675097c3955b1")
-                $id = htmlspecialchars($key);
+                $id = htmlspecialchars($ad["id"]);
         
                 // Přístup k detailům inzerátu
                 $lokalita = htmlspecialchars($ad["lokalita"]);
@@ -86,7 +86,7 @@
                 </div>   ";
             
             }
-        }
+        
         
 
         ?>

@@ -4,62 +4,81 @@
     // pres session user id
     //
     $ads = loadAds();
+    $data = [];
     if(isset($_POST["submit"])) {
         $ad_id = $_POST["ad_id"];
-        $data = [$ad_id  =>[
-            "lokalita" => $_POST["lokalita"],
-            "cena" => $_POST["cena"],
-            "mena" => $_POST["mena"],
-            "rozmery" => $_POST["rozmery"],
-            "popis" => trim($_POST["popis"]),
-            "prodej" => $_POST["prodej"],
-            // "user_id" => $_POST["user_id"]
-        
-            ]
-        ];
+        if(isset($_GET["id"])){
+            $my_id = $_GET["id"];
+        }else {
+            $my_id = null;
+        }
 
+        
+        $found = false;
+            foreach ($ads as &$ad) {
+                if ($ad["id"] == $my_id) {
+                    $ad["lokalita"] = trim($_POST["lokalita"]);
+                    $ad["cena"] = $_POST["cena"];
+                    $ad["mena"] = $_POST["mena"];
+                    $ad["rozmery"] = $_POST["rozmery"];
+                    $ad["popis"] = trim($_POST["popis"]);
+                    $ad["prodej"] = $_POST["prodej"];
+                    $ad["user_id"] = $_POST["user_id"];
+                    $found = true;
+                    saveAd($ads);
+                    header("Location: index.php?php=uspesne upraveno ");
+                    break; 
+                    
+            }
+        
+        if (!$found) {
+            $errors[] = "Nenalezen inzerát s daným ID.";
+        }
+    }
+ 
          $validate_all = validate_all($data);
          $is_price_size_right_format = price_size_check($_POST["cena"],$_POST["rozmery"]);
     
-    $errors = [];
+        $errors = [];
 
-    //hledame errory
-    if (isset($validate_all) && !validate_all($data)) {
-        $errors[] = "Všechna pole musí být vyplněna.";
-    }
-    if (isset($is_price_size_right_format) && !price_size_check($_POST["cena"], $_POST["rozmery"])) {
-        $errors[] = "Cena a rozměry musí být čísla větší než 0.";
+        //hledame errory
+        if (isset($validate_all) && !validate_all($data)) {
+            $errors[] = "Všechna pole musí být vyplněna.";
+        }
+        if (isset($is_price_size_right_format) && !price_size_check($_POST["cena"], $_POST["rozmery"])) {
+            $errors[] = "Cena a rozměry musí být čísla větší než 0.";
+        }
+        //pridame do db
+        if(empty($errors)) {
+
+        //     foreach ($ads as &$ad) {
+        //       if ($ad['id'] == $my_id) {
+        //         $ad[] = $name;
+        //         $ad[] = $age;
+        //         break;
+        //       }
+        //     } 
+        //   }
+
+        }
     }
 
-    if(empty($errors)) {
-        //tak to pridame do databaze
-    }
-}
     if (isset($_GET["id"])) {
         $my_id = $_GET["id"];
-        $ad_data = null;
-    
-        foreach ($ads as $ad) {
-            if (isset($ad[$my_id])) {
-                $ad_data = $ad[$my_id]; 
-                break;
+        $found = false;
+        foreach ($ads as &$ad) {
+                $lokalita = $ad["lokalita"];
+                $cena = $ad["cena"];
+                $mena = $ad["mena"];
+                $rozmery = $ad["rozmery"];
+                $popis = $ad["popis"];
+                $prodej = $ad["prodej"];
+                $found = true;
+            }}
+            if(!$found) {
+                $errors[] = "nenalazen inzerát s daným id";
             }
-        }
-    
-        if ($ad_data) {
-            // prelinkujeme array
-            $lokalita = $ad_data["lokalita"];
-            $cena = $ad_data["cena"];
-            $mena = $ad_data["mena"];
-            $rozmery = $ad_data["rozmery"];
-            $popis = $ad_data["popis"];
-            $prodej = $ad_data["prodej"];
-        } else {
-            // klic neexistuje
-            echo "<p class='php'>Inzerát s ID $my_id nebyl nalezen.</p>";
-            $lokalita = $cena = $mena = $rozmery = $popis = $prodej = "";
-        }
-    }
+         
     ?>
 
 
@@ -89,7 +108,8 @@
         <form action="" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <div class="form">
-                    <input type="hidden" name="ad_id" id=<?php echo isset($_GET['id']) ? htmlspecialchars($_GET['id']) : ''; ?>
+                    <input type="hidden" name ="user_id" value ="12" >
+                    <input type="hidden" name="ad_id" value=<?php echo isset($_GET['id']) ? htmlspecialchars($_GET['id']) : ''; ?>
   
                     >
                     <label for="lokalita">Lokalita</label>
@@ -152,7 +172,7 @@
 
                 </div>
                 <div class="form">
-                    <input type="submit" value="Přidat" class="submit" name="submit">
+                    <input type="submit" value="Upravit" class="submit" name="submit">
                 </div>
                 </div>
             </fieldset>

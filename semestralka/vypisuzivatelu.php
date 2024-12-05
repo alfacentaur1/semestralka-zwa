@@ -1,14 +1,24 @@
 <?php
     require "functions.php";
     $users = loadUsers();
-    if (isset($_POST["submit"])) {
-        foreach ($users as &$user) { // Použijeme referenci, aby se změny projevily přímo v poli
-            if (isset($user["username"]) && isset($_POST[$user["username"]] )) {
-                $user["role"] = $_POST[$user["username"]];
+    print_r($users);
+    
+//   foreach ($users as &$user) {
+//     if ($user['id'] == $id) {
+//       $user['name'] = $name;
+//       $user["age"] = $age;
+//       break;
+    print_r($users);
+    if (isset($_POST["submit"]) && !empty($users)) {
+        foreach ($users as &$user) {
+            $username = $user["username"];
+            if (isset($_POST[$username])) { // Kontrola, zda klíč existuje
+                $user["role"] = $_POST[$username]; // Aktualizace role
             }
         }
-        saveRoles($users); // Uložíme až po ukončení cyklu
+        saveRoles($users); // Uložení aktualizovaných uživatelů
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +29,6 @@
     <title>Výpis uživatelů</title>
     <link rel="stylesheet" href="css/vypisuzivatelu.css">
     <link rel="stylesheet" href="css/univerzal.css">
-    <script src="ajax.js"></script>
 </head>
 <body>
 <?php require "nav.php" ?>
@@ -28,23 +37,19 @@
 <form action='vypisuzivatelu.php' method='post'>
 <?php 
 
-
-
-
-
 foreach ($users as $user) {
-    $username = htmlspecialchars($user["username"]); // Escapování výstupu
-    $role = htmlspecialchars($user["role"]); // Escapování výstupu
-
+    $id = htmlspecialchars($user["id"]);
+    $username = htmlspecialchars($user["username"]); 
+    $role = htmlspecialchars($user["role"]); 
+    print_r($user);
     echo "
 
         <div class='uzivatel'>
                 <p class='underline'>" . ($role == 'admin' ? 'admin' : 'uživatel') . "</p>
                 <p>$username</p>
 
-
-                    <label for='$username'>Role</label>
-                    <select name='$username' id='role'>
+                    <label for=$username>Role</label>
+                    <select name='$username' id='$username'>
                         <option value='admin' " . ($role == 'admin' ? 'selected' : '') . ">admin</option>
                         <option value='uzivatel' " . ($role == 'uzivatel' ? 'selected' : '') . ">uživatel</option>
                     </select>

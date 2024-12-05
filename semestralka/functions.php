@@ -77,29 +77,13 @@
     //inputy nejsou empty
 
     function validate_all($data) {
-        foreach ($data as $key => $fields) {
-            //kdyz je to pole
-            if (is_array($fields)) {
-                //musime iterovat pres vsechna vnorena pole
-                foreach ($fields as $field_key => $value) {
-                    //obrazek je dalsi array
-                    if (is_array($value)) {
-                        // obrazek
-                        if (isset($value["tmp_name"]) && $value["error"] !== UPLOAD_ERR_OK) {
-                            return false;
-                        }
-                    } else {
-                        //uz zadne arraye nejsou
-                        // ostatni stringy
-                        if (!isset($value) || trim((string)$value) === "") {
-                            return false;
-                        }
-                    }
-                }
+        foreach ($data as $key => $bit) {
+            if($key !== 'img' && (!isset($bit) || empty(trim($bit)))){
+                return false;
             }
-        return true; // vsechno alright
+        }return true;
     }
-}
+
     //validace foto true kdyz je spravne
     function is_right_format($photo) {
         if(($photo["type"] == "image/png"
@@ -214,4 +198,12 @@
 
 
     }
+
+    function saveAd($ad){
+        $str = json_encode( $ad);
+        file_put_contents("inzeraty.json", $str);
+      }
+
+
+
 ?>

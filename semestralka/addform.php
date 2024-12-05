@@ -5,7 +5,8 @@ $errors = []; // Pole pro ukládání chyb
 
 if (isset($_POST["submit"])) {
     $ad_id = $_POST["ad_id"];
-    $data = [$ad_id  =>[
+    $data = [
+        "id" => $ad_id,
         "lokalita" => $_POST["lokalita"],
         "cena" => $_POST["cena"],
         "mena" => $_POST["mena"],
@@ -13,9 +14,9 @@ if (isset($_POST["submit"])) {
         "popis" => trim($_POST["popis"]),
         "prodej" => $_POST["prodej"],
         "img" => $_FILES["img"],
-        "user_id" => $_POST["user_id"],
+        "user_id" => $_POST["user_id"]
         
-    ]];
+    ];
     $validate_all = validate_all($data);
     $is_price_size_right_format = price_size_check($_POST["cena"],$_POST["rozmery"]);
     // Validace polí
