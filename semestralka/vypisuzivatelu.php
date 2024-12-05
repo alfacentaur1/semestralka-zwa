@@ -1,6 +1,14 @@
 <?php
     require "functions.php";
     $users = loadUsers();
+    if (isset($_POST["submit"])) {
+        foreach ($users as &$user) { // Použijeme referenci, aby se změny projevily přímo v poli
+            if (isset($user["username"]) && isset($_POST[$user["username"]] )) {
+                $user["role"] = $_POST[$user["username"]];
+            }
+        }
+        saveRoles($users); // Uložíme až po ukončení cyklu
+    }
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +25,7 @@
 <?php require "nav.php" ?>
 <div id='container-uzivatelu'>
 <div class='form'>
-<form action='#' method='post'>
+<form action='vypisuzivatelu.php' method='post'>
 <?php 
 
 
@@ -35,8 +43,8 @@ foreach ($users as $user) {
                 <p>$username</p>
 
 
-                    <label for='role-$username'>Role</label>
-                    <select name='role-$username' id='role'>
+                    <label for='$username'>Role</label>
+                    <select name='$username' id='role'>
                         <option value='admin' " . ($role == 'admin' ? 'selected' : '') . ">admin</option>
                         <option value='uzivatel' " . ($role == 'uzivatel' ? 'selected' : '') . ">uživatel</option>
                     </select>
@@ -47,7 +55,7 @@ foreach ($users as $user) {
 
 
 <div class='tlacitko'>
-<input type='submit' value='potvrdit' class='submit'>
+<input type='submit' value='potvrdit' class='submit' name="submit">
 </form>
 </div>
 </div>

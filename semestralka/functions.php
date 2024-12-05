@@ -205,4 +205,13 @@
 
 
     }
+
+    function saveRoles($file) {
+        //global $db;
+        $json = json_encode($file);
+
+        $result = file_put_contents("users.json",$json);
+
+
+    }
 ?>
