@@ -13,8 +13,6 @@
         }
     }
 
-    // Zkontrolujte hodnoty v poli
-    var_dump($users_arr);
 
     // Zpracování požadavku na ověření uživatelského jména
     if (isset($_POST["username"])) {
