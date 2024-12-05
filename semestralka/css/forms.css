@@ -183,3 +183,16 @@ input:focus  {
     font-weight: bold;
     margin:auto 0;
 }
+
+.hidden {
+    display:none;
+    font-weight: bold;
+    margin:auto 0;
+}
+
+.ajax {
+    display: inline !important;
+    color:red !important; 
+    font-size: 1rem;
+
+}

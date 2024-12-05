@@ -37,6 +37,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/forms.css" rel="stylesheet">
     <script src="js/script.js" defer></script> 
+    <script src="js/ajax.js" defer></script> 
 </head>
 <body>
     <div class="main">
@@ -53,7 +54,7 @@
                     <h2>Vítejte</h2>
                 </div>
                 <div class="form">
-                    <label for="username">Uživatelské jméno</label>
+                    <label for="username" >Uživatelské jméno</label>
                     <input type="text" id="username" name="username"
                     <?php
                         if(isset($username)){
@@ -61,6 +62,7 @@
                         }
                     ?>
                     required>
+                <p class="hidden" id="hidden">username už je obsazené</p>
                 </div>
                 <div class="form">
                     <label for="email">Email</label>
@@ -134,10 +136,6 @@
                             }
                         }
                     }
-                    
-                
-
-
 
                 ?>
             </fieldset>
