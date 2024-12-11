@@ -13,8 +13,32 @@
             $my_id = null;
         }
 
-        
-        $found = false;
+        $data = [
+            "id" => $ad_id,
+            "lokalita" => $_POST["lokalita"],
+            "cena" => $_POST["cena"],
+            "mena" => $_POST["mena"],
+            "rozmery" => $_POST["rozmery"],
+            "popis" => trim($_POST["popis"]),
+            "prodej" => $_POST["prodej"],
+            "user_id" => $_POST["user_id"]
+            
+        ];
+ 
+         $validate_all = validate_all($data);
+         $is_price_size_right_format = price_size_check($_POST["cena"],$_POST["rozmery"]);
+    
+        $errors = [];
+
+        //hledame errory
+        if (isset($validate_all) && !validate_all($data)) {
+            $errors[] = "Všechna pole musí být vyplněna.";
+        }
+        if (isset($is_price_size_right_format) && !price_size_check($_POST["cena"], $_POST["rozmery"])) {
+            $errors[] = "Cena a rozměry musí být čísla větší než 0.";
+        }
+        if(empty($errors)) {
+            $found = false;
             foreach ($ads as &$ad) {
                 if ($ad["id"] == $my_id) {
                     $ad["lokalita"] = trim($_POST["lokalita"]);
@@ -30,55 +54,32 @@
                     break; 
                     
             }
-        
-        if (!$found) {
+        }if (!$found) {
             $errors[] = "Nenalezen inzerát s daným ID.";
         }
     }
- 
-         $validate_all = validate_all($data);
-         $is_price_size_right_format = price_size_check($_POST["cena"],$_POST["rozmery"]);
     
-        $errors = [];
 
-        //hledame errory
-        if (isset($validate_all) && !validate_all($data)) {
-            $errors[] = "Všechna pole musí být vyplněna.";
+   
+}
+if (isset($_GET["id"])) {
+    $my_id = $_GET["id"];
+    $found = false;
+    foreach ($ads as &$ad) {
+            $lokalita = $ad["lokalita"];
+            $cena = $ad["cena"];
+            $mena = $ad["mena"];
+            $rozmery = $ad["rozmery"];
+            $popis = $ad["popis"];
+            $prodej = $ad["prodej"];
+            $found = true;
+        }}
+        if(isset($found) && !$found) {
+            $errors[] = "nenalazen inzerát s daným id";
+        }else{
+            header("index.php?php=inzerat s daným id neexistuje");
         }
-        if (isset($is_price_size_right_format) && !price_size_check($_POST["cena"], $_POST["rozmery"])) {
-            $errors[] = "Cena a rozměry musí být čísla větší než 0.";
-        }
-        //pridame do db
-        if(empty($errors)) {
 
-        //     foreach ($ads as &$ad) {
-        //       if ($ad['id'] == $my_id) {
-        //         $ad[] = $name;
-        //         $ad[] = $age;
-        //         break;
-        //       }
-        //     } 
-        //   }
-
-        }
-    }
-
-    if (isset($_GET["id"])) {
-        $my_id = $_GET["id"];
-        $found = false;
-        foreach ($ads as &$ad) {
-                $lokalita = $ad["lokalita"];
-                $cena = $ad["cena"];
-                $mena = $ad["mena"];
-                $rozmery = $ad["rozmery"];
-                $popis = $ad["popis"];
-                $prodej = $ad["prodej"];
-                $found = true;
-            }}
-            if(!$found) {
-                $errors[] = "nenalazen inzerát s daným id";
-            }
-         
     ?>
 
 
@@ -90,12 +91,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/addform.css">
     <link rel="stylesheet" href="css/univerzal.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
     <title>Upravit příspěvek</title>
 </head>
 <body>
 <?php require "nav.php" ?>
     <h2 >Upravení inzerátu</h2>
-    <?php 
+    <?php if(!isset($_GET["id"])){
+
+    }
+    
+    $errors[] = "nenalazen inzerát s daným id"; 
     if(isset($errors)){
         foreach($errors as $error){
             echo "<p class='php'>$error</p>";
@@ -166,8 +174,8 @@
                 <div class="form">
                      <label for="prodej">Chci</label>       
                      <select name="prodej" id="prodej" class="prodej">
-                <option value="pronajimat" <?php echo (isset($_POST["prodej"]) && $_POST["prodej"] === "pronajimat"|| isset($prodej) && $prodej == "pronajimat") ? "selected" : ""; ?>>pronajímat</option>
-                <option value="prodat" <?php echo (isset($_POST["prodej"]) && $_POST["prodej"] === "prodat" || isset($prodej) && $prodej == "pronajimat") ? "selected" : ""; ?>>prodat</option>
+                <option value="pronajímat" <?php echo ((isset($_POST["prodej"]) && $_POST["prodej"] === "pronajimat")||( isset($prodej) && $prodej == "pronajímat")) ? "selected" : ""; ?>>pronajímat</option>
+                <option value="prodat" <?php echo (isset($_POST["prodej"]) && $_POST["prodej"] === "prodat" || isset($prodej) && $prodej == "prodat") ? "selected" : ""; ?>>prodat</option>
             </select>
 
                 </div>

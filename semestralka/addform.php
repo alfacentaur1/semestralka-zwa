@@ -38,11 +38,49 @@ if (isset($_POST["submit"])) {
 
     // Pokud nejsou chyby, pokračujeme
     if (empty($errors)) {
-        addAd($data); // Uložení inzerátu
-        header("Location: index.php?php=uspesne pridano");
-        exit();
+        $new_width = 300;
+        $new_height = 200;
+        $uploadFilePath = "./images/" . $ad_id . ".jpg"; // Uložení jako JPG
+    
+        // Zpracování obrázku
+        $uploaded_img = $_FILES['img']['tmp_name'];
+        list($width, $height, $type) = getimagesize($uploaded_img);
+    
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $srcImage = imagecreatefromjpeg($uploaded_img);
+                break;
+            case IMAGETYPE_PNG:
+                $srcImage = imagecreatefrompng($uploaded_img);
+                break;
+            case IMAGETYPE_GIF:
+                $srcImage = imagecreatefromgif($uploaded_img);
+                break;
+            default:
+                $errors[] = "Neplatný formát obrázku.";
+                break;
+        }
+    
+        // Pokud je formát platný, změňte velikost
+        if (empty($errors)) {
+            $newImage = imagecreatetruecolor($new_width, $new_height);
+            imagecopyresampled($newImage, $srcImage, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+    
+            // Uložení nového obrázku
+            imagejpeg($newImage, $uploadFilePath, 90);
+    
+            // Uvolnění paměti
+            imagedestroy($srcImage);
+            imagedestroy($newImage);
+    
+            // Pokračování s uložením inzerátu
+            addAd($data); // Uložení inzerátu
+            header("Location: index.php?php=uspesne pridano");
+            exit();
+        }
     }
 }
+    
 ?>
 
 
@@ -55,24 +93,15 @@ if (isset($_POST["submit"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/addform.css">
     <link rel="stylesheet" href="css/univerzal.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
     <title>Přidat příspěvek</title>
 </head>
 <body>
 <?php require "nav.php" ?>
     <h2 >Přidání inzerátu</h2>
     <?php 
-        // if (isset($validate_all) && !$validate_all) {
-        //     echo "<p class='php'>Všechna pole musí být vyplněna</p>";
-        // } 
-        // if (isset($_FILES["img"]) && $_FILES["img"]["error"] !== UPLOAD_ERR_OK) {
-        //     echo "<p class='php'>Musíte nahrát obrázek</p>";
-        //         }
-        // if (isset($is_right_format) && !$is_right_format) {
-        //     echo "<p class='php'>Obrázek musí být ve formátu JPEG nebo PNG</p>";
-        // } 
-        // if (isset($is_price_size_right_format) && !$is_price_size_right_format) {
-        //     echo "<p class='php'>Cena a rozměry musí být čísla větší než 0</p>";
-        // }
     foreach($errors as $error){
         echo "<p class='php'>$error</p>";
     }
@@ -128,13 +157,13 @@ if (isset($_POST["submit"])) {
                     </textarea>
                 <div class="form" id="img">
                     <label for="img-input">Foto</label>
-                    <input type="file" name="img" id="img-input" >
+                    <input type="file" name="img" id="img-input" accept="image/*">
                 </div>
                 </div>
                 <div class="form">
                      <label for="prodej">Chci</label>       
                      <select name="prodej" id="prodej" class="prodej">
-                <option value="pronajimat" <?php echo (isset($_POST["prodej"]) && $_POST["prodej"] === "pronajimat") ? "selected" : ""; ?>>pronajímat</option>
+                <option value="pronajímat" <?php echo (isset($_POST["prodej"]) && ($_POST["prodej"] === "pronajímat" || $_POST["prodej"] === "pronajimat")) ? "selected" : ""; ?>>pronajímat</option>
                 <option value="prodat" <?php echo (isset($_POST["prodej"]) && $_POST["prodej"] === "prodat") ? "selected" : ""; ?>>prodat</option>
             </select>
 

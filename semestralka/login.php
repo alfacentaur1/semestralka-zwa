@@ -16,7 +16,7 @@
             $can_log_in = userLogin($username, $password, $users);
             if ($can_log_in) {
                 // prihlaseni je uspesne
-                header("Location: index.php");
+                header("Location: index.php?php=vitejte");
                 exit;
             } else {
                 $logged_in = false; // spatne udaje
@@ -38,6 +38,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="css/forms.css" rel="stylesheet">
+        <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
     </head>
     <body>
         <div class="main">
