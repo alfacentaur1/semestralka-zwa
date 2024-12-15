@@ -1,6 +1,10 @@
 <?php
     require "functions.php";
-    $users = loadUsers();
+    require "header.php";
+    if(!isset($_SESSION["username"])||!isset($current_user) || $current_user["role"] != "admin"){
+        $message = "nemate_povoleni";
+        header("Location: login.php?error=$message");
+    }
 
     if (isset($_POST["submit"]) && !empty($users)) {
         foreach ($users as &$user) {
@@ -46,8 +50,8 @@ foreach ($users as $user) {
                 <p class='underline'>" . ($role == 'admin' ? 'admin' : 'uživatel') . "</p>
                 <p>$username</p>
 
-                    <label for=$username>Role</label>
-                    <select name='$username' id='$username'>
+                    <label for=".trim($id).">Role</label>
+                    <select name='$username' id='".trim($id)."'>
                         <option value='admin' " . ($role == 'admin' ? 'selected' : '') . ">admin</option>
                         <option value='uzivatel' " . ($role == 'uzivatel' ? 'selected' : '') . ">uživatel</option>
                     </select>
@@ -59,6 +63,7 @@ foreach ($users as $user) {
 
 <div class='tlacitko'>
 <input type='submit' value='potvrdit' class='submit' name="submit">
+</div>
 </form>
 </div>
 </div>

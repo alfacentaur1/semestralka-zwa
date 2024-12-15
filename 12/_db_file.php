@@ -4,7 +4,14 @@
     //var_dump($db);
 
     function get_user($username) {
-        // TODO
+        global $db;
+        foreach($db["users"] as $user){
+            if($username == $user["user"]){
+                return $user;
+            }else {
+                return null;
+            }
+        }
         
     }
 

@@ -1,15 +1,14 @@
 <?php
-    require "functions.php";
-    $ads = loadAds();
-    // Seřazení podle 'rozmery'
-    usort($ads, function ($a, $b) {
-    // Porovnávejte hodnoty jako čísla
-        return (int)$a['rozmery'] <=> (int)$b['rozmery'];
-});
-?>
+        require "header.php";
+        $ads = loadAds();
+        if ($ads){
+        // sort "rozmery" - in ascending order
+        usort($ads, function ($a, $b) {
+            return (int)$a['rozmery'] <=> (int)$b['rozmery'];
+        
+    });}
 
-
-
+    ?>
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -25,14 +24,13 @@
 <body>
 <?php require "nav.php" ?>
 <?php 
-    // Nastavení limitu (počet záznamů na stránku) a aktuální stránky
-    $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, ["options" => ["default" => 5, "min_range" => 1]]);
+    // set the limit (ads for page) and actual page
+    $limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT, ["options" => ["default" => 4, "min_range" => 1]]);
     $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, ["options" => ["default" => 1, "min_range" => 1, "max_range" => ceil(getCount($ads)/$limit)]]);
     $offset = ($page - 1) * $limit;
-
     $ads_limit = listAds($ads,$limit, $offset);
     if (isset($_GET["php"])){
-         $message = $_GET["php"];
+        $message = htmlspecialchars($_GET["php"]);
         echo "<div class='phpdiv'></div><p class='php'>$message</p></div>";
     }
     
@@ -80,23 +78,20 @@
             </div>
         <?php endforeach; ?>
         <?php 
-        //Pagination links
+        // Pagination links
         $totalAds = count($ads); 
         $totalPages = ceil($totalAds / $limit);
-
         echo '<div class="buttons">';
-
-           for ($i = 1; $i <= $totalPages; $i++) {
-               if ($i == $page) { //kdyz jsme na aktualni strance, nejde kliknout
-                   echo '<span>' . $i . '</span>';
-               } else {//jinak pokracuj v odkazech
-                   echo '<a  href="?limit=' . $limit . '&page=' . $i . '">' . $i . '</a> ';
-               }
-           }
-
-           echo '</div>';
-       } else {
-           echo '<div class="empty">Zadny user nenalezen.</div>';
+        for ($i = 1; $i <= $totalPages; $i++) {
+            if ($i == $page) { // if we are on this page, its not clickable
+                echo '<span>' . $i . '</span>';
+            } else {// continue
+                echo '<a  href="?limit=' . $limit . '&page=' . $i . '">' . $i . '</a> ';
+            }
+        }
+        echo '</div>';
+    } else {
+        echo '<div class="empty">Zadny inzerat nenalezen.</div>';
         }
     ?>
 </div>

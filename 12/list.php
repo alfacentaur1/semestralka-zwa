@@ -1,9 +1,12 @@
 <?php
     require_once('_db_file.php');
     // TODO: ziskat uzivatele z session
+    session_start();
 
     // TODO session check / login check
-    
+    // if(!isset($_SESSION["user"])){
+    //     header("Location: login.php");
+    // }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +21,17 @@
 </head>
 <body>
     <!-- TODO: vypsat logout odkaz  a jmeno uzivatele -->
+     <header>
+        <?php
+            if (isset($_SESSION["user"])){
+                echo "logged as: ". $_SESSION["user"]["name"]." .| <a href='logout.php'></a>";
+            }else {
+                echo "not logged  " ."<a href='login.php'>login</a>";
+            }
+
+        ?>
+
+     </header>
     <?php
         // TODO: vypsat logout odkaz  a jmeno uzivatele
 

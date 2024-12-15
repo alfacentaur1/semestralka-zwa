@@ -1,8 +1,6 @@
 <?php
-require "functions.php";
-$ads = loadAds();
+require "header.php";
 ?>
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -20,7 +18,9 @@ $ads = loadAds();
 
 <?php
 if (isset($_GET["id"])) {
-    $current_id = $_GET["id"];
+    $current_id = $_GET["id"]; // id of ad
+    $ad_user = null;
+    $ads = loadAds();
 
     // Searching ads
     $foundAd = false;
@@ -31,6 +31,7 @@ if (isset($_GET["id"])) {
         }
     }
 
+
     if ($foundAd) {
         $prodej = htmlspecialchars($foundAd["prodej"]);
         $lokalita = htmlspecialchars($foundAd["lokalita"]);
@@ -38,11 +39,19 @@ if (isset($_GET["id"])) {
         $mena = htmlspecialchars($foundAd["mena"]);
         $rozmery = htmlspecialchars($foundAd["rozmery"]);
         $popis = htmlspecialchars($foundAd["popis"]);
+
+    // get the ad user
+    foreach($users as $user) {
+        if($user["id"] == $foundAd["user_id"]){
+            $ad_user = $user;
+            break;
+        }
+    }
         ?>
 
         <div class="content-container">
             <div class="inzerat">
-                <img src="images/<?php echo $current_id; ?>" alt="obrazek-inzeratu">
+                <img src="<?php echo 'images/'.$current_id; ?>" alt="obrazek-inzeratu">
                 
                 <div class="text-container">
                     <p class="underline">Lokalita</p>
@@ -73,27 +82,47 @@ if (isset($_GET["id"])) {
 
                 <div class="text-container">
                     <p class="underline">Uživatel</p>
-                    <p>Filip K</p>
+                    <p>
+                    <?php
+                     if(isset($ad_user)){
+                        echo htmlspecialchars($ad_user["username"]);
+                     }
+                     ?>
+
+                    </p>
                 </div>
 
                 <div class="text-container">
                     <p class="underline">Email</p>
-                    <p>kopecfi3@student.cvut.cz</p>
+                    <p><?php
+                     if(isset($ad_user["email"])){
+                        echo htmlspecialchars($ad_user["email"]);
+                     }
+                     ?></p>
                 </div>
-
+                <?php
+                if(isset($current_user) && isset($ad_user)&& (($current_user["id"] == $ad_user["id"]))){?>
                 <div class="prispevek-uprava">
-                    <a href="upravit.php?id=<?php echo $current_id; ?>" class="prispevek-a">upravit</a>
+                    <a href="<?php echo 'upravit.php?id='.$current_id; ?>" class="prispevek-a">upravit</a>
+                    <a href="<?php echo 'deleteAd.php?id='.$current_id; ?>" class="prispevek-a">smazat</a>
+                
+                </div>
+                <?php
+                }elseif(isset($current_user)&&($current_user["role"]) == "admin"){
+                ?>
+                <div class="prispevek-uprava">
                     <a href="deleteAd.php?id=<?php echo $current_id; ?>" class="prispevek-a">smazat</a>
                 </div>
+                <?php }?>
             </div>
         </div>
 
         <?php
     } else {
-        echo "<h1>Inzerát s daným ID nebyl nalezen</h1>";
+        echo "Inzerát s daným ID nebyl nalezen";
     }
 } else {
-    echo "<h1>Inzerát s daným ID nebyl nalezen</h1>";
+    echo "Inzerát s daným ID nebyl nalezen";
 }
 ?>
 

@@ -5,7 +5,9 @@
     
 
     // TODO: check if user is logged in
-    
+    if(!isset($_SESSION["user"])){
+        header("Location: login.php?returnurl=add.php");
+    }
 
     if(isset($_POST['submit'])) {
         // check csrf token if it is valid

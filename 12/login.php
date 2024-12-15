@@ -11,7 +11,23 @@
         $password = $_POST['password'];
 
         // TODO: check if user exists and password is correct
-        
+        $user = get_user($username);
+
+        // var_dump($user);
+
+        if($user) {
+            if(password_verify($password,$user["password"])){
+                session_start();
+                $_SESSION["user"] = $user;
+                header("Location: list.php");
+                // $returnurl = isset($_POST["returnurl"])?$_POST["returnurl"];
+                
+            }else {
+                $error = "uzivatelske jmeno a heslo se neshoduji";
+            }
+        }else {
+            $error = "uzivatel nenalezen";
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -25,6 +41,10 @@
     <form action="" method="post">
         <?php
             // TODO: add returnurl to form
+            //musime checknout jestli je to url
+            if(isset($_GET["returnurl"])){
+                echo "<input type='hidden' name='returnurl' value='".htmlspecialchars($_GET["returnurl"])."'";
+            }
         ?>
         <div>
         <label>Username: <input autocomplete="off" type="text" value="" name="username"></label>

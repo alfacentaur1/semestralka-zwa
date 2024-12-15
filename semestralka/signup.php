@@ -1,5 +1,5 @@
 <?php
-
+    session_start();
     require "functions.php";
 
     if(isset($_POST["submit"])) {
@@ -8,19 +8,29 @@
         $password = $_POST["password"];
         $password_znovu = $_POST["password_znovu"];
         $role = $_POST["role"];
-
-        //validace username
-        $validated_username = validate_username($username); //"good" kdyz je to spravne, jinak "len"
-        $validated_password = validate_password($password); //"len" pri delce, "special" pri znaku jinak true
-        $validated_email = validate_email($email); // true kdyz je spravny
-        $are_passwords_same = are_passwords_same($password,$password_znovu); //true spravne, false spatne
+        
         $users = loadUsers();
+
+        //validate username
+        // "good" if the username is valid, otherwise "len" (too short)
+        $validated_username = validate_username($username); 
+
+        // "len" if the password is too short, "special" if it lacks required characters, otherwise true
+        $validated_password = validate_password($password); 
+
+        // true if the email is valid, false otherwise
+        $validated_email = validate_email($email); 
+
+        // true if the passwords match, false otherwise
+        $are_passwords_same = are_passwords_same($password, $password_znovu); 
+
         if(isAvalaible($email,$username) && $validated_email && $are_passwords_same && $validated_password
         &&$validated_username == "good"){
-            addUser($email,$username,$password,$role);
-            header("Location: index.php?php=vitejte");
+            $hashed_password = password_hash($password,PASSWORD_DEFAULT);
+            addUser($email,$username,$hashed_password,$role);
+            $_SESSION["username"] = $username;
+            header("Location: index.php");
         }
-        
     }
 ?>
 
@@ -53,7 +63,7 @@
                 </div>
                 <div class="form">
                     <label for="username" >Uživatelské jméno</label>
-                    <input type="text" id="username" name="username"
+                    <input autocomplete = "off" type="text" id="username" name="username"
                     <?php
                         if(isset($username)){
                             echo "value='" .htmlspecialchars($username)."'";
@@ -64,7 +74,7 @@
                 </div>
                 <div class="form">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" 
+                    <input autocomplete = "off" type="email" id="email" name="email" 
                     <?php
                         if(isset($email)){
                             echo "value='" .htmlspecialchars($email)."'";
@@ -97,10 +107,8 @@
                     if(isset($validated_password) && $validated_password !== true) {
                         if($validated_password == "len") {
                             echo "<p class='php'>Heslo musí mít minimálně 6 znaků</p>";
-                        }else{
-                            if($validated_password =="special") {
+                        }elseif ($validated_password =="special"){ 
                             echo "<p class='php'>Heslo musí mít min. 1 speciální znak a min. 1 velké písmeno</p>";
-                            }
                         }
                     }
                     if(isset($validated_email) && !$validated_email) {
@@ -108,14 +116,12 @@
                             echo "<p class='php'>Email už je obsazený</p>";
                         
                         }elseif(!$validated_email) {
-                            echo "<p class='php'>Email je ve špatném formátu</p>";
+                            echo "<p class='php'>Email je ve špatném formátu nebo zadaná doména neexistuje</p>";
                         }
-                    }
-
-                    
+                    }                 
                     if(isset($are_passwords_same)){
                         if($are_passwords_same === true) {
-                            //nic
+                            //nothing
                         }else {
                             echo "<p class='php'>Hesla se neshodují</p>"; 
                         }
@@ -133,7 +139,6 @@
                             }
                         }
                     }
-
                 ?>
             </fieldset>
         </form>

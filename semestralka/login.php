@@ -1,36 +1,32 @@
 <?php
     require "functions.php";
-
+    session_start();
     if(isset($_POST["submit"])) {
         $username = $_POST["username"];
         $password = $_POST["password"];
     $users = loadUsers();
-    $logged_in = True;
+    $logged_in = false;
 
-        //validace username
-        //TODO
-        //$is_username_correct (kdyz je prazdne nebo spatne => false)
-        //is_password_correct (kdyz je prazdne, nebo spatne => false)
-        
+        //validate username
+        if(isset($_POST["submit"]) ){
         if (!empty($username) && !empty($password)) {
-            $can_log_in = userLogin($username, $password, $users);
-            if ($can_log_in) {
-                // prihlaseni je uspesne
-                header("Location: index.php?php=vitejte");
-                exit;
-            } else {
-                $logged_in = false; // spatne udaje
+            foreach($users as $user){
+                if ($user["username"] == $username) {
+                    if (password_verify($password,$user["password"])){
+                        $logged_in = true;
+                        $_SESSION["username"] = $username;
+                        header("Location: index.php");
+                        exit;
+                    }
+                }
             }
         } else {
             $logged_in = false; // nevyplneno
         }
-    }else {
-        //nic
     }
+}
 
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -49,8 +45,7 @@
                 <h1>Prodej.</h1>
                 <h1>Jednoduše.</h1>
                 <h1 class="rentco">Rentco.</h1>
-            </div>
-    
+            </div>    
         <form action="login.php" method="post">
             <fieldset class="fieldset-form">
                 <div class="form">
@@ -59,7 +54,7 @@
                 </div>
                 <div class="form">
                     <label for="username">Uživatelské jméno</label>
-                    <input type="text" name="username" id="username" 
+                    <input autocomplete = "off" type="text" name="username" id="username" 
                     
                     <?php
                         if(isset($username)){
@@ -85,13 +80,13 @@
                             }
                         }
                     }
-                    
+                    if(isset($_GET["error"])){
+                        $message = htmlspecialchars($_GET["error"]);
+                        echo "<p class='php'>$message</p>";
+                    }                
                 ?>
-    
             </fieldset>
         </form>
-        </div>
-        
-    
+        </div>    
     </body>
 </html>

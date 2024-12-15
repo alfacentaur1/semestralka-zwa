@@ -1,10 +1,12 @@
 <?php
     require "functions.php";
-    //TODO
-    // pres session user id
-    //
+    require "header.php";
+    if(!isset($_SESSION["username"])){
+        header("Location: login.php?error=nutne_prihlaseni");
+    }
     $ads = loadAds();
     $data = [];
+    $errors = [];
     if(isset($_POST["submit"])) {
         $ad_id = $_POST["ad_id"];
         if(isset($_GET["id"])){
@@ -12,7 +14,6 @@
         }else {
             $my_id = null;
         }
-
         $data = [
             "id" => $ad_id,
             "lokalita" => $_POST["lokalita"],
@@ -21,8 +22,7 @@
             "rozmery" => $_POST["rozmery"],
             "popis" => trim($_POST["popis"]),
             "prodej" => $_POST["prodej"],
-            "user_id" => $_POST["user_id"]
-            
+            // "user_id" => $_POST["user_id"]
         ];
  
          $validate_all = validate_all($data);
@@ -30,7 +30,7 @@
     
         $errors = [];
 
-        //hledame errory
+        //search for errors
         if (isset($validate_all) && !validate_all($data)) {
             $errors[] = "Všechna pole musí být vyplněna.";
         }
@@ -47,20 +47,16 @@
                     $ad["rozmery"] = $_POST["rozmery"];
                     $ad["popis"] = trim($_POST["popis"]);
                     $ad["prodej"] = $_POST["prodej"];
-                    $ad["user_id"] = $_POST["user_id"];
                     $found = true;
                     saveAd($ads);
-                    header("Location: index.php?php=uspesne upraveno ");
-                    break; 
-                    
+                    $redirect = $ad["id"];
+                    header("Location: inzerat.php?id=$redirect");
+                    break;                    
             }
         }if (!$found) {
             $errors[] = "Nenalezen inzerát s daným ID.";
         }
     }
-    
-
-   
 }
 if (isset($_GET["id"])) {
     $my_id = $_GET["id"];
@@ -79,11 +75,7 @@ if (isset($_GET["id"])) {
         }else{
             header("index.php?php=inzerat s daným id neexistuje");
         }
-
     ?>
-
-
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -100,28 +92,24 @@ if (isset($_GET["id"])) {
 <?php require "nav.php" ?>
     <h2 >Upravení inzerátu</h2>
     <?php if(!isset($_GET["id"])){
-
-    }
-    
-    $errors[] = "nenalazen inzerát s daným id"; 
+        $errors[] = "nenalazen inzerát s daným id"; 
+    } 
     if(isset($errors)){
         foreach($errors as $error){
             echo "<p class='php'>$error</p>";
         }
 }
-    
-    
     ?>
     <div class="form-1">
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="upravit.php" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <div class="form">
-                    <input type="hidden" name ="user_id" value ="12" >
+                    <!-- <input type="hidden" name ="user_id" value ="12" > -->
                     <input type="hidden" name="ad_id" value=<?php echo isset($_GET['id']) ? htmlspecialchars($_GET['id']) : ''; ?>
   
                     >
                     <label for="lokalita">Lokalita</label>
-                    <input type="text" name="lokalita" id="lokalita"
+                    <input autocomplete = "off" type="text" name="lokalita" id="lokalita"
                     <?php
                         if(isset($_POST["lokalita"] )){
                             echo "value='" .htmlspecialchars($_POST["lokalita"])."'";
@@ -133,7 +121,7 @@ if (isset($_GET["id"])) {
                 <div class="form">
                     <div class="form" id="select">
                         <label for="cena">Cena</label>
-                        <input type="text" name="cena" id="cena"
+                        <input autocomplete = "off" type="text" name="cena" id="cena"
                         <?php
                         if(isset($_POST["cena"])){
                             echo "value='" .htmlspecialchars($_POST["cena"])."'";
@@ -149,7 +137,7 @@ if (isset($_GET["id"])) {
                     </div>
                 <div class="form">
                     <label for="rozmery">Rozměry(m2)</label>
-                    <input type="text" name="rozmery" id="rozmery" 
+                    <input autocomplete = "off" type="text" name="rozmery" id="rozmery" 
                     <?php
                     if(isset($_POST["rozmery"])){
                         echo "value='" .htmlspecialchars($_POST["rozmery"])."'";
@@ -161,15 +149,13 @@ if (isset($_GET["id"])) {
                 </div>
                 <div class="form">
                     <label for="popis" class="fieldset">Popis</label>
-                    <textarea name="popis" id="popis" cols="94" rows="15">
-                    <?php
+                    <textarea name="popis" id="popis" cols="94" rows="15"><?php
                     if(isset($_POST["popis"])){
                         echo htmlspecialchars($_POST["popis"]);
                     }elseif(isset($popis)) {
                         echo htmlspecialchars($popis);
                     }
-                    ?>                     
-                    </textarea>
+                    ?></textarea>
                 </div>
                 <div class="form">
                      <label for="prodej">Chci</label>       
