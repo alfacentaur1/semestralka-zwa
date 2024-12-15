@@ -66,6 +66,7 @@ if (isset($_GET["id"])) {
     $found = false;
     foreach ($ads as &$ad) {
         //validate user id
+        if($my_id == $ad["id"]){
             $lokalita = $ad["lokalita"];
             $cena = $ad["cena"];
             $mena = $ad["mena"];
@@ -74,7 +75,7 @@ if (isset($_GET["id"])) {
             $prodej = $ad["prodej"];
             $found = true;
             $user_id = $ad["user_id"];
-        }}
+        }}}
         if(isset($found) && !$found) {
             $errors[] = "nenalazen inzerát s daným id";
         }elseif ($user_id != $current_user["id"]) {
